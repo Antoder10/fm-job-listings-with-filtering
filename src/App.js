@@ -1,23 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import JobsList from './components/JobsList';
+import Filters from './components/Filters';
+import data from './data.json';
 
-function App() {
+const App = () => {
+  const [jobs, setJobs] = useState([]);
+  const [filters, setFilters] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+
+  useEffect(() => {
+    setJobs(data);
+  }, []);
+
+  const filteredJobsArray = jobs.filter(job => {
+    return Object.values(job).flat().some(val => filters.includes(val));
+  })
+
+  useEffect(() => {
+    setFilteredJobs(filteredJobsArray);
+  }, [filters, filteredJobsArray]);
+
+
+  const addFilter = tag => {
+    if (filters.includes(tag)) return;
+    setFilters(prev => [...prev, tag]);
+  }
+
+  const removeFilter = tag => {
+    setFilters(filters.filter(filter => filter !== tag));
+  }
+
+  const clearFilters = () => {
+    setFilters([]);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header className="bg-blue-500 h-48" >
       </header>
+      <section className="container bg-gray-300 pt-12 px-4 pb-2">
+        {filters.length > 0 && <Filters filters={filters} clearFilters={clearFilters} removeFilter={removeFilter}/>}
+        <JobsList jobs={filteredJobs.length > 0 ? filteredJobs : jobs} addFilter={addFilter} />
+      </section>
     </div>
   );
 }
