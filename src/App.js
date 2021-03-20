@@ -14,7 +14,7 @@ const App = () => {
 
   useEffect(() => {
     filters.length > 0 ? setJobs(filteredJobsArray) : setJobs(data);
-  }, [filters]);
+  }, [filters, filteredJobsArray]);
 
   const addFilter = tag => {
     if (filters.includes(tag)) return;
