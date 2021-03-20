@@ -6,15 +6,19 @@ import data from './data.json';
 const App = () => {
   const [jobs, setJobs] = useState([]);
   const [filters, setFilters] = useState([]);
-  //const [filteredJobs, setFilteredJobs] = useState([]);
-
-  const filteredJobsArray = jobs.filter(job => {
-    return Object.values(job).flat().some(val => filters.includes(val));
-  })
+  const [filteredJobs, setFilteredJobs] = useState([]);
 
   useEffect(() => {
-    filters.length > 0 ? setJobs(filteredJobsArray) : setJobs(data);
-  }, [filters, filteredJobsArray]);
+    setJobs(data);
+  }, []);
+
+
+  useEffect(() => {
+    const filteredJobsArray = jobs.filter(job => {
+      return Object.values(job).flat().some(val => filters.includes(val));
+    })
+    setFilteredJobs(filteredJobsArray);
+    }, [filters, jobs])
 
   const addFilter = tag => {
     if (filters.includes(tag)) return;
@@ -35,7 +39,7 @@ const App = () => {
       </header>
       <section className="container bg-gray-300 pt-12 px-4 pb-2">
         {filters.length > 0 && <Filters filters={filters} clearFilters={clearFilters} removeFilter={removeFilter}/>}
-        <JobsList jobs={jobs} addFilter={addFilter} />
+        <JobsList jobs={filters.length > 0 ? filteredJobs : jobs} addFilter={addFilter} />
       </section>
     </div>
   );
