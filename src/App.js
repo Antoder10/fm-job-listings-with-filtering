@@ -17,7 +17,7 @@ const App = () => {
   })
 
   useEffect(() => {
-    if (filters.lenght > 0) setFilteredJobs(filteredJobsArray);
+    if (filters.length > 0) setFilteredJobs(filteredJobsArray);
   }, [filters, filteredJobsArray]);
 
 
